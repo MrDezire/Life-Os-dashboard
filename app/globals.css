@@ -376,6 +376,12 @@ i {
   color: var(--text-muted);
 }
 
+.task-text {
+  flex: 1;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
 .delete-task-btn {
   background: none;
   border: none;
