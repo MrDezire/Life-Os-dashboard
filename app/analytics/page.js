@@ -81,7 +81,11 @@ export default function AnalyticsPage() {
                             </div>
                             <div className="stat-item">
                                 <span className="stat-label">Completion Rate</span>
-                                <span className="stat-value">{Math.round((stats.completedTasks / (stats.completedTasks + stats.pendingTasks)) * 100)}%</span>
+                                <span className="stat-value">
+                                    {stats.completedTasks + stats.pendingTasks > 0
+                                        ? Math.round((stats.completedTasks / (stats.completedTasks + stats.pendingTasks)) * 100)
+                                        : 0}%
+                                </span>
                             </div>
                         </div>
                         <div className="chart-placeholder">
