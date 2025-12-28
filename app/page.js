@@ -9,6 +9,7 @@ import PomodoroWidget from '@/components/widgets/PomodoroWidget';
 import NotesWidget from '@/components/widgets/NotesWidget';
 import WeatherWidget from '@/components/widgets/WeatherWidget';
 import MusicWidget from '@/components/widgets/MusicWidget';
+import QuoteWidget from '@/components/widgets/QuoteWidget';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -32,14 +33,29 @@ export default async function Home() {
                 </header>
 
                 <div className="bento-grid">
-                    <TaskWidget />
-                    <WeatherWidget />
-                    <HabitWidget />
-                    <FinanceWidget />
-                    <GoalWidget />
+                    {/* Main Focus Area */}
+                    <div className="span-large">
+                        <TaskWidget />
+                    </div>
+
+                    {/* Productivity & Habits */}
+                    <div className="span-medium">
+                        <HabitWidget />
+                    </div>
+
+                    {/* Tools */}
                     <PomodoroWidget />
+                    <FinanceWidget />
+
+                    {/* Insights & Wellness */}
+                    <div className="span-medium">
+                        <GoalWidget />
+                    </div>
+
                     <NotesWidget />
+                    <WeatherWidget />
                     <MusicWidget />
+                    <QuoteWidget />
                 </div>
 
                 <div className="watermark">
