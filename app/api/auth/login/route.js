@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, initDB } from '@/lib/db';
 import { verifyPassword, createSession } from '@/lib/auth';
 
 export async function POST(request) {
     try {
         const { username, password } = await request.json();
+
+        // Ensure DB schema is up to date (for new tables)
+        await initDB();
 
         const result = await db.execute({
             sql: 'SELECT * FROM users WHERE username = ?',
