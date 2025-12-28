@@ -1,7 +1,11 @@
 import db from '@/lib/db';
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function POST(request) {
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     try {
         const { calendarUrl } = await request.json();
 
@@ -39,16 +43,16 @@ export async function POST(request) {
                 minute: '2-digit'
             })}`;
 
-            // Check if task already exists
+            // Check if task already exists for this user
             const rs = await db.execute({
-                sql: 'SELECT id FROM tasks WHERE text = ?',
-                args: [taskText]
+                sql: 'SELECT id FROM tasks WHERE text = ? AND userId = ?',
+                args: [taskText, userId]
             });
 
             if (rs.rows.length === 0) {
                 await db.execute({
-                    sql: 'INSERT INTO tasks (text, completed) VALUES (?, ?)',
-                    args: [taskText, 0]
+                    sql: 'INSERT INTO tasks (userId, text, completed) VALUES (?, ?, ?)',
+                    args: [userId, taskText, 0]
                 });
                 count++;
             }

@@ -1,22 +1,37 @@
 'use client';
 import { useSettings } from '@/components/Providers';
 import Link from 'next/link';
+import { UserButton, useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
 
 export default function Sidebar() {
     const { name, saveName, toggleTheme, theme } = useSettings();
+    const { user, isLoaded } = useUser();
+
+    // Sync Clerk name with settings if it hasn't been set yet
+    useEffect(() => {
+        if (isLoaded && user && name === 'User') {
+            const clerkName = user.firstName || user.username || 'User';
+            if (clerkName !== 'User') {
+                saveName(clerkName);
+            }
+        }
+    }, [isLoaded, user, name, saveName]);
 
     return (
         <aside className="sidebar glass-panel">
             <div className="profile-section">
                 <div className="avatar-container">
-                    <img src={`https://ui-avatars.com/api/?name=${name}&background=random`} alt="Profile" />
+                    <UserButton afterSignOutUrl="/" />
                 </div>
-                <input
-                    type="text"
-                    className="editable-name"
-                    value={name}
-                    onChange={(e) => saveName(e.target.value)}
-                />
+                {isLoaded && user && (
+                    <input
+                        type="text"
+                        className="editable-name"
+                        value={name}
+                        onChange={(e) => saveName(e.target.value)}
+                    />
+                )}
             </div>
 
             <nav className="nav-menu">
@@ -29,7 +44,7 @@ export default function Sidebar() {
             </nav>
 
             <div className="theme-toggle-container">
-                <button onClick={toggleTheme} className="theme-btn">
+                <button onClick={toggleTheme} className="theme-btn" title="Toggle Theme">
                     <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
                 </button>
             </div>
