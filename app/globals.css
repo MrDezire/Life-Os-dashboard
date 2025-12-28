@@ -604,128 +604,175 @@ button {
   }
 }
 
+/* --- Responsive Design --- */
+
+/* Tablets and small laptops */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .task-widget,
+  .habit-widget,
+  .weather-widget {
+    grid-column: span 2;
+  }
+}
+
+/* Mobile Devices */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
-    padding: 12px;
+    padding: 0;
     height: auto;
     overflow-x: hidden;
   }
 
   .sidebar {
     width: 100%;
-    height: auto;
-    padding: 12px;
+    height: 70px;
+    padding: 0 16px;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     position: sticky;
-    top: 12px;
-    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+    border-left: none;
+    border-bottom: 1px solid var(--glass-border);
+    margin: 0;
+    z-index: 1000;
   }
 
   .profile-section {
-    margin-bottom: 0;
-    flex-direction: row;
-    gap: 12px;
+    margin: 0;
+    gap: 10px;
   }
 
   .avatar-container {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 0;
+    width: 35px;
+    height: 35px;
   }
 
   .editable-name {
-    text-align: left;
-    font-size: 1rem;
-    width: auto;
+    font-size: 0.9rem;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .nav-menu {
     flex-direction: row;
-    gap: 8px;
-    margin-left: auto;
-    margin-right: 12px;
+    gap: 12px;
+    margin: 0;
+    position: static;
   }
 
   .nav-item {
-    padding: 8px;
-    gap: 0;
+    padding: 10px;
+    background: transparent;
+  }
+
+  .nav-item i {
+    font-size: 1.2rem;
   }
 
   .nav-item span {
     display: none;
-    /* Hide text on very small screens to save space */
   }
 
   .theme-toggle-container {
-    margin-top: 0;
-    flex-shrink: 0;
+    margin: 0;
   }
 
   .theme-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
   }
 
   .main-content {
-    padding: 0;
+    padding: 16px;
+    width: 100%;
     gap: 16px;
   }
 
   .header-section {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
     gap: 16px;
-    padding: 8px 0;
+    margin-top: 10px;
+  }
+
+  .greeting-container {
+    width: 100%;
   }
 
   .greeting {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .sub-greeting {
+    font-size: 0.9rem;
   }
 
   .time-widget {
     width: 100%;
-    text-align: center;
-    padding: 12px;
+    max-width: 100%;
+    margin: 0;
+    padding: 15px;
   }
 
   #current-time {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .bento-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding-bottom: 100px;
+    /* Space for watermark/footer */
   }
 
   .task-widget,
   .habit-widget,
-  .music-widget,
-  .notes-widget,
-  .weather-widget,
   .finance-widget,
   .goals-widget,
-  .pomodoro-widget {
-    grid-column: span 1;
+  .pomodoro-widget,
+  .notes-widget,
+  .music-widget,
+  .weather-widget {
+    grid-column: span 1 !important;
+  }
+
+  /* Specific widget fixes for mobile */
+  .finance-details {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stat-card {
+    width: 100%;
   }
 }
 
-.weather-widget {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-@media (max-width: 1024px) {
-  .weather-widget {
-    grid-column: span 2;
+/* Very small devices */
+@media (max-width: 400px) {
+  .sidebar {
+    padding: 0 10px;
   }
-}
 
-@media (max-width: 768px) {
-  .weather-widget {
-    grid-column: span 1;
+  .nav-menu {
+    gap: 5px;
+  }
+
+  .greeting {
+    font-size: 1.4rem;
   }
 }
