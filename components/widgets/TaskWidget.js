@@ -5,60 +5,88 @@ import CalendarSync from '../CalendarSync';
 export default function TaskWidget() {
     const [tasks, setTasks] = useState([]);
     const [newItem, setNewItem] = useState('');
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    // Load tasks from localStorage on mount
+    // Fetch tasks from API on mount
     useEffect(() => {
-        const saved = localStorage.getItem('lifeOS_tasks');
-        if (saved) {
-            try {
-                setTasks(JSON.parse(saved));
-            } catch (e) {
-                console.error('Failed to parse tasks', e);
-            }
-        }
-        setIsLoaded(true);
+        fetchTasks();
     }, []);
 
-    // Save tasks to localStorage whenever they change
-    useEffect(() => {
-        if (isLoaded) {
-            localStorage.setItem('lifeOS_tasks', JSON.stringify(tasks));
+    const fetchTasks = async () => {
+        try {
+            const res = await fetch('/api/tasks');
+            if (res.ok) {
+                const data = await res.json();
+                setTasks(data);
+            }
+        } catch (e) {
+            console.error('Failed to fetch tasks', e);
+        } finally {
+            setLoading(false);
         }
-    }, [tasks, isLoaded]);
+    };
 
-    const addTask = () => {
-        if (!newItem.trim()) return;
-        const newTask = {
-            id: Date.now(),
-            text: newItem,
-            completed: false,
-            createdAt: new Date().toISOString()
-        };
+    const addTask = async (textOverride) => {
+        const text = textOverride || newItem;
+        if (!text.trim()) return;
+
+        // Optimistic update
+        const tempId = Date.now();
+        const newTask = { id: tempId, text: text, completed: false };
         setTasks([newTask, ...tasks]);
-        setNewItem('');
+        if (!textOverride) setNewItem('');
+
+        try {
+            const res = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, completed: false })
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Update with real ID
+                setTasks(prev => prev.map(t => t.id === tempId ? { ...t, id: data.id } : t));
+            }
+        } catch (e) {
+            console.error('Failed to save task', e);
+        }
     };
 
-    const toggle = (id) => {
+    const toggle = async (id, currentStatus) => {
+        // Optimistic
         setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+
+        try {
+            await fetch('/api/tasks', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, completed: !currentStatus })
+            });
+        } catch (e) {
+            console.error(e);
+        }
     };
 
-    const remove = (id) => {
+    const remove = async (id) => {
+        // Optimistic
         setTasks(tasks.filter(t => t.id !== id));
+
+        try {
+            await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' });
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const handleCalendarSync = (newTasks) => {
-        // newTasks is an array of task objects
-        // Merge with existing tasks avoiding duplicates? IDs are timestamps so unlikely to collide unless batch added rapidly.
-        // But Google Calendar events might be re-added? Custom logic.
-        // For simplicity, just append.
-
-        // Ensure newTasks is array
-        const tasksToAdd = Array.isArray(newTasks) ? newTasks : [newTasks];
-        setTasks(prev => [...tasksToAdd, ...prev]);
+        if (Array.isArray(newTasks)) {
+            newTasks.forEach(t => addTask(t.summary || t.text)); // Adjust based on obj shape
+        } else {
+            addTask(newTasks.text);
+        }
     };
 
-    if (!isLoaded) return null; // Avoid hydration mismatch
+    if (loading) return <div className="bento-card task-widget glass-panel" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Tasks...</div>;
 
     return (
         <article className="bento-card task-widget glass-panel">
@@ -75,7 +103,7 @@ export default function TaskWidget() {
                         <input
                             type="checkbox"
                             checked={task.completed}
-                            onChange={() => toggle(task.id)}
+                            onChange={() => toggle(task.id, task.completed)}
                             className="task-checkbox"
                         />
                         <span className="task-text">{task.text}</span>

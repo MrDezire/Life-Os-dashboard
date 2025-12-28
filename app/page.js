@@ -1,52 +1,33 @@
-'use client';
-import { useSettings } from '@/components/Providers';
-import { useEffect, useState } from 'react';
 import Sidebar from '@/components/Sidebar';
+import TimeWidget from '@/components/widgets/TimeWidget';
 import TaskWidget from '@/components/widgets/TaskWidget';
 import HabitWidget from '@/components/widgets/HabitWidget';
 import FinanceWidget from '@/components/widgets/FinanceWidget';
-import MusicWidget from '@/components/widgets/MusicWidget';
 import GoalWidget from '@/components/widgets/GoalWidget';
-import WeatherWidget from '@/components/widgets/WeatherWidget';
-import NotesWidget from '@/components/widgets/NotesWidget';
 import PomodoroWidget from '@/components/widgets/PomodoroWidget';
+import NotesWidget from '@/components/widgets/NotesWidget';
+import WeatherWidget from '@/components/widgets/WeatherWidget';
+import MusicWidget from '@/components/widgets/MusicWidget';
+import { getSession } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-    const { name } = useSettings();
-    const [time, setTime] = useState(null); // Fix hydration mismatch by starting null
+export default async function Home() {
+    const session = await getSession();
 
-    useEffect(() => {
-        setTime(new Date()); // Set on client
-        const timer = setInterval(() => setTime(new Date()), 1000);
-        return () => clearInterval(timer);
-    }, []);
-
-    const getGreeting = (d) => {
-        const h = d.getHours();
-        if (h < 12) return 'Good Morning';
-        if (h < 17) return 'Good Afternoon';
-        return 'Good Evening';
-    };
-
-    if (!time) return <div className="loading-screen">Loading Life OS...</div>;
+    if (!session) {
+        redirect('/login');
+    }
 
     return (
         <div className="app-container">
-            <Sidebar />
+            <Sidebar user={session} />
             <main className="main-content">
                 <header className="header-section">
                     <div className="greeting-container">
-                        <h1 className="greeting">{getGreeting(time)}, <span>{name}</span></h1>
+                        <h1 className="greeting">Welcome back, <span>{session.username}</span></h1>
                         <h2 className="sub-greeting">Ready to conquer the day?</h2>
                     </div>
-                    <div className="time-widget glass-panel">
-                        <h2 id="current-time">
-                            {time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                        </h2>
-                        <p id="current-date">
-                            {time.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
-                        </p>
-                    </div>
+                    <TimeWidget />
                 </header>
 
                 <div className="bento-grid">
@@ -66,5 +47,4 @@ export default function Home() {
             </main>
         </div>
     );
-
 }
