@@ -606,10 +606,40 @@ button {
 
 /* --- Responsive Design --- */
 
+.sidebar-top-group {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 /* Tablets and small laptops */
 @media (max-width: 1024px) {
   .sidebar {
-    width: 240px;
+    width: 80px;
+    padding: 24px 0;
+  }
+
+  .sidebar-top-group {
+    align-items: center;
+    justify-content: flex-start;
+    gap: 32px;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-link-btn span,
+  .editable-name {
+    display: none;
   }
 
   .bento-grid {
@@ -623,7 +653,7 @@ button {
   }
 }
 
-/* Mobile Devices */
+/* Mobile Devices - COMPACT TIERED TOP NAV */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
@@ -634,9 +664,8 @@ button {
 
   .sidebar {
     width: 100%;
-    height: 70px;
-    padding: 0 16px;
-    flex-direction: row;
+    height: auto;
+    padding: 8px 16px 12px 16px;
     position: sticky;
     top: 0;
     left: 0;
@@ -648,96 +677,101 @@ button {
     z-index: 1000;
   }
 
-  .profile-section {
-    margin: 0;
-    gap: 10px;
+  .sidebar-top-group {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
   }
 
-  .avatar-container {
-    width: 35px;
-    height: 35px;
-  }
-
-  .editable-name {
-    font-size: 0.9rem;
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  /* ROW 1: Quick Actions (Priority) */
+  .actions-group {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .nav-menu {
     flex-direction: row;
-    gap: 12px;
-    margin: 0;
-    position: static;
+    gap: 8px;
   }
 
-  .nav-item {
-    padding: 10px;
-    background: transparent;
-  }
-
-  .nav-item i {
-    font-size: 1.2rem;
-  }
-
-  .nav-item span {
-    display: none;
-  }
-
-  .theme-toggle-container {
-    margin: 0;
+  .nav-link-btn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--text-main);
   }
 
   .theme-btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  /* ROW 2: Profile (Always visible) */
+  .profile-section {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 0 0;
+  }
+
+  .avatar-container {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .editable-name {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    width: auto;
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    text-align: left;
+    overflow: visible;
   }
 
   .main-content {
     padding: 16px;
     width: 100%;
-    gap: 16px;
   }
 
   .header-section {
-    flex-direction: column-reverse;
-    align-items: center;
+    padding: 0;
+    margin-bottom: 16px;
     text-align: center;
-    gap: 16px;
-    margin-top: 10px;
-  }
-
-  .greeting-container {
-    width: 100%;
   }
 
   .greeting {
-    font-size: 1.6rem;
-    margin-bottom: 4px;
-  }
-
-  .sub-greeting {
-    font-size: 0.9rem;
+    font-size: 1.7rem;
   }
 
   .time-widget {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 15px;
-  }
-
-  #current-time {
-    font-size: 2rem;
+    margin: 12px 0;
   }
 
   .bento-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-    padding-bottom: 100px;
-    /* Space for watermark/footer */
   }
 
   .task-widget,
@@ -749,30 +783,5 @@ button {
   .music-widget,
   .weather-widget {
     grid-column: span 1 !important;
-  }
-
-  /* Specific widget fixes for mobile */
-  .finance-details {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .stat-card {
-    width: 100%;
-  }
-}
-
-/* Very small devices */
-@media (max-width: 400px) {
-  .sidebar {
-    padding: 0 10px;
-  }
-
-  .nav-menu {
-    gap: 5px;
-  }
-
-  .greeting {
-    font-size: 1.4rem;
   }
 }
