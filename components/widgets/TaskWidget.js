@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import CalendarSync from '../CalendarSync';
 
 export default function TaskWidget() {
     const [tasks, setTasks] = useState([]);
@@ -46,6 +47,17 @@ export default function TaskWidget() {
         setTasks(tasks.filter(t => t.id !== id));
     };
 
+    const handleCalendarSync = (newTasks) => {
+        // newTasks is an array of task objects
+        // Merge with existing tasks avoiding duplicates? IDs are timestamps so unlikely to collide unless batch added rapidly.
+        // But Google Calendar events might be re-added? Custom logic.
+        // For simplicity, just append.
+
+        // Ensure newTasks is array
+        const tasksToAdd = Array.isArray(newTasks) ? newTasks : [newTasks];
+        setTasks(prev => [...tasksToAdd, ...prev]);
+    };
+
     if (!isLoaded) return null; // Avoid hydration mismatch
 
     return (
@@ -53,15 +65,18 @@ export default function TaskWidget() {
             <div className="card-header">
                 <h3><i className="fa-solid fa-check-circle"></i> Tasks</h3>
             </div>
+
+            <CalendarSync onSync={handleCalendarSync} />
+
             <div className="task-list">
                 {tasks.length === 0 && <p className="empty-state">No tasks yet</p>}
                 {tasks.map(task => (
                     <div key={task.id} className={`task-item ${task.completed ? 'completed' : ''}`}>
                         <input
                             type="checkbox"
-                            className="task-checkbox"
                             checked={task.completed}
                             onChange={() => toggle(task.id)}
+                            className="task-checkbox"
                         />
                         <span className="task-text">{task.text}</span>
                         <button className="delete-task-btn" onClick={() => remove(task.id)}>
