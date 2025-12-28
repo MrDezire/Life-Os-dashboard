@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:c:/Users/husen/OneDrive/Desktop/DashBoard/life-os/dev.db"
+}
+
+model UserSettings {
+  id        Int    @id @default(1)
+  name      String @default("User")
+  theme     String @default("dark")
+}
+
+model Task {
+  id        Int      @id @default(autoincrement())
+  text      String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Habit {
+  id        Int      @id @default(autoincrement())
+  name      String
+  // Storing completed days as a simple string "0,1,2" (indexes) or proper logs
+  // For simplicity in this v1, let's just store the current week's state as a JSON string or simpler
+  // Let's do a comma separated string of day indexes e.g., "0,2,4"
+  completedDays String @default("") 
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  type      String   // "income" or "expense"
+  amount    Float
+  description String?
+  createdAt DateTime @default(now())
+}
+
+model Goal {
+  id        Int      @id @default(autoincrement())
+  title     String
+  progress  Int      @default(0)
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  content   String
+  updatedAt DateTime @updatedAt
+}
