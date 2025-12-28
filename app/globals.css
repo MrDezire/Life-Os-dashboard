@@ -709,179 +709,147 @@ button {
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
-    padding: 0;
+    padding: 16px;
+    padding-top: 80px;
+    /* Space for Toggle Button */
     height: auto;
     overflow-x: hidden;
-    padding-top: 80px;
-    /* Space for Top Bar */
-    padding-bottom: 100px;
-    /* Space for Bottom Nav */
   }
 
-  /* Top Bar (Logo + Profile) */
-  .sidebar {
-    width: 100%;
-    height: 70px;
-    padding: 0 20px;
+  /* Hamburger Toggle Button */
+  .mobile-menu-toggle {
     position: fixed;
-    /* Changed from sticky to fixed */
+    top: 20px;
+    left: 20px;
+    z-index: 10000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(10, 10, 15, 0.9), rgba(20, 20, 30, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--neon-cyan);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobile-menu-toggle:active {
+    transform: scale(0.9);
+  }
+
+  /* Sidebar Drawer */
+  .sidebar {
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    flex-direction: row;
-    align-items: center;
+    height: 100vh;
+    width: 280px;
+    z-index: 9999;
+    background: rgba(10, 10, 15, 0.98);
+    backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateX(-110%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-direction: column;
+    padding: 80px 24px 24px 24px;
+    /* Top padding for close button space */
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
     border-radius: 0;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(10, 10, 15, 0.95);
-    /* More solid background */
-    backdrop-filter: blur(20px);
-    z-index: 5000;
-    /* High z-index */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
   }
 
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Reset Internal Layout for Drawer */
   .profile-section {
-    margin: 0;
-    gap: 16px;
     width: 100%;
-    display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    gap: 16px;
+    margin-bottom: 40px;
   }
 
   .avatar-container {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    /* Prevent shrinking */
-    margin: 0;
+    width: 80px;
+    height: 80px;
   }
 
   .editable-name {
     display: block !important;
-    font-size: 1.2rem;
-    width: auto;
-    flex: 1;
-    /* Take remaining space */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
+    text-align: center;
+    font-size: 1.4rem;
+    white-space: normal;
+  }
+
+  .actions-group {
+    position: static;
+    display: flex;
+    flex-direction: column !important;
+    height: auto;
     background: transparent;
     border: none;
-    color: var(--text-main);
-  }
-
-  /* Bottom Bar (Navigation) */
-  .actions-group {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: rgba(10, 10, 15, 0.98);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: row !important;
-    align-items: center;
-    justify-content: space-evenly;
-    /* Even spacing */
-    padding: 0 10px;
-    padding-bottom: env(safe-area-inset-bottom);
-    z-index: 5000;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  .nav-menu {
-    flex-direction: row;
-    gap: 0;
-    width: auto;
-    flex: 0 1 auto;
-    display: flex;
-    justify-content: center;
+    box-shadow: none;
+    padding: 0;
     gap: 20px;
   }
 
-  .nav-link-btn {
-    width: 50px;
-    height: 50px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
+  .nav-menu {
     flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+    gap: 12px;
   }
 
-  .nav-link-btn:hover,
-  .nav-link-btn.active {
-    background: transparent;
-    transform: translateY(-2px);
-    box-shadow: none;
-  }
-
-  .nav-link-btn i {
-    font-size: 1.4rem;
-    margin: 0;
+  .nav-link-btn {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 16px 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
   }
 
   .nav-link-btn span {
-    display: none;
+    display: inline;
   }
 
-  .theme-toggle-container {
-    margin: 0;
+  /* Hide Desktop Toggle Button */
+  .mobile-menu-toggle {
+    display: flex;
   }
 
-  .theme-btn {
-    width: 45px;
-    height: 45px;
-    transform: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  /* Content Adjustments */
   .main-content {
-    padding: 16px;
-    width: 100%;
     margin: 0;
-    overflow: visible;
-    /* Let body handle scroll */
-  }
-
-  .header-section {
     padding: 0;
-    margin-bottom: 24px;
-    text-align: center;
-  }
-
-  .time-widget {
-    margin-top: 16px;
     width: 100%;
-    text-align: center;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-  }
-
-  #current-time {
-    font-size: 2.2rem;
   }
 
   .bento-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
 
   .task-widget,
   .habit-widget,
+  .weather-widget,
+  .music-widget,
+  .notes-widget {
+    grid-column: span 1 !important;
+  }
+
   .finance-widget,
   .goals-widget,
-  .pomodoro-widget,
-  .notes-widget,
-  .music-widget,
-  .weather-widget {
+  .pomodoro-widget {
     grid-column: span 1 !important;
+  }
+}
+
+/* Hide Toggle on Desktop */
+@media (min-width: 769px) {
+  .mobile-menu-toggle {
+    display: none !important;
   }
 }
