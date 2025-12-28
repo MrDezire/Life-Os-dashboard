@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-export default function TimeWidget() {
+export default function DigitalClockWidget() {
     const [time, setTime] = useState(null);
 
     useEffect(() => {
@@ -11,7 +11,6 @@ export default function TimeWidget() {
     }, []);
 
     if (!time) {
-        // Render a placeholder or empty div to avoid hydration mismatch
         return <div className="time-widget glass-panel" style={{ height: '90px' }}></div>;
     }
 
