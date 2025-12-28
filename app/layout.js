@@ -5,7 +5,16 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata = {
     title: 'Life OS Dashboard',
-    description: 'Your personal all-in-one dashboard',
+    description: 'Your personal all-in-one dashboard by Basha',
+    icons: {
+        icon: '/logo.png',
+        apple: '/logo.png',
+    },
+    openGraph: {
+        title: 'Life OS Dashboard',
+        description: 'Your personal all-in-one dashboard by Basha',
+        images: ['/logo.png'],
+    },
 }
 
 export default function RootLayout({ children }) {
