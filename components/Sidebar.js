@@ -20,39 +20,37 @@ export default function Sidebar() {
 
     return (
         <aside className="sidebar glass-panel">
-            <div className="sidebar-top-group">
-                <div className="actions-group">
-                    <nav className="nav-menu">
-                        <Link href="/" className="nav-link-btn" title="Dashboard">
-                            <i className="fa-solid fa-layer-group"></i>
-                            <span>Dashboard</span>
-                        </Link>
-                        <Link href="/analytics" className="nav-link-btn" title="Analytics">
-                            <i className="fa-solid fa-chart-line"></i>
-                            <span>Analytics</span>
-                        </Link>
-                    </nav>
-
-                    <div className="theme-toggle-container">
-                        <button onClick={toggleTheme} className="theme-btn" title="Toggle Theme">
-                            <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
-                        </button>
-                    </div>
+            <div className="profile-section">
+                <div className="avatar-container">
+                    <UserButton afterSignOutUrl="/" />
                 </div>
+                {isLoaded && user && (
+                    <input
+                        type="text"
+                        className="editable-name"
+                        value={name}
+                        onChange={(e) => saveName(e.target.value)}
+                        placeholder="Your Name"
+                    />
+                )}
+            </div>
 
-                <div className="profile-section">
-                    <div className="avatar-container">
-                        <UserButton afterSignOutUrl="/" />
-                    </div>
-                    {isLoaded && user && (
-                        <input
-                            type="text"
-                            className="editable-name"
-                            value={name}
-                            onChange={(e) => saveName(e.target.value)}
-                            placeholder="Your Name"
-                        />
-                    )}
+            <div className="actions-group">
+                <nav className="nav-menu">
+                    <Link href="/" className="nav-link-btn" title="Dashboard">
+                        <i className="fa-solid fa-layer-group"></i>
+                        <span>Dashboard</span>
+                    </Link>
+                    <Link href="/analytics" className="nav-link-btn" title="Analytics">
+                        <i className="fa-solid fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </Link>
+                </nav>
+
+                <div className="theme-toggle-container">
+                    <button onClick={toggleTheme} className="theme-btn" title="Toggle Theme">
+                        <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                    </button>
                 </div>
             </div>
         </aside>
