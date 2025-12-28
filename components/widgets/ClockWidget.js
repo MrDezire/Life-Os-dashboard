@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-export default function DigitalClockWidget() {
+export default function ClockWidget() {
     const [time, setTime] = useState(null);
 
     useEffect(() => {

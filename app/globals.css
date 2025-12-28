@@ -344,9 +344,28 @@ i {
   color: var(--neon-purple);
 }
 
-.task-widget {
+.span-large {
   grid-column: span 2;
   grid-row: span 2;
+  display: flex;
+}
+
+.span-medium {
+  grid-column: span 2;
+  grid-row: span 1;
+  display: flex;
+}
+
+/* Make child widgets fill the span container */
+.span-large>*,
+.span-medium>* {
+  width: 100%;
+  height: 100%;
+}
+
+.task-widget {
+  /* Removed dedicated grid props as they are now handled by containers */
+  height: 100%;
 }
 
 .habit-widget {
