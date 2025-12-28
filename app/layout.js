@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import './globals.css';
 import { SettingsProvider } from '@/components/Providers';
 import { ClerkProvider } from '@clerk/nextjs';
