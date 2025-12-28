@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata = {
     title: 'Life OS Dashboard',
-    description: 'Your personal all-in-one dashboard by Basha',
+    description: 'Your advanced productivity dashboard.',
     icons: {
         icon: '/logo.png',
         apple: '/logo.png',
