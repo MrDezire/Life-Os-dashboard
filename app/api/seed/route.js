@@ -14,30 +14,30 @@ export async function POST() {
             });
         }
 
-        // Seed habits with the requested ones
+        // Seed habits without specifying IDs (let AUTOINCREMENT handle it)
         await db.execute({
-            sql: 'INSERT INTO habits (id, name, completedDays) VALUES (?, ?, ?)',
-            args: [1, 'Drink Water', '']
+            sql: 'INSERT INTO habits (name, completedDays) VALUES (?, ?)',
+            args: ['Drink Water', '']
         });
         await db.execute({
-            sql: 'INSERT INTO habits (id, name, completedDays) VALUES (?, ?, ?)',
-            args: [2, 'Exercise', '']
+            sql: 'INSERT INTO habits (name, completedDays) VALUES (?, ?)',
+            args: ['Exercise', '']
         });
         await db.execute({
-            sql: 'INSERT INTO habits (id, name, completedDays) VALUES (?, ?, ?)',
-            args: [3, 'Study', '']
+            sql: 'INSERT INTO habits (name, completedDays) VALUES (?, ?)',
+            args: ['Study', '']
         });
 
         // Seed default goal
         await db.execute({
-            sql: 'INSERT INTO goals (id, title, progress) VALUES (?, ?, ?)',
-            args: [1, 'Learn React', 25]
+            sql: 'INSERT INTO goals (title, progress) VALUES (?, ?)',
+            args: ['Learn React', 25]
         });
 
         // Seed empty notes
         await db.execute({
-            sql: 'INSERT INTO notes (id, content) VALUES (?, ?)',
-            args: [1, '']
+            sql: 'INSERT INTO notes (content) VALUES (?)',
+            args: ['']
         });
 
         return NextResponse.json({
@@ -46,6 +46,6 @@ export async function POST() {
         });
     } catch (e) {
         console.error('Seed error:', e);
-        return NextResponse.json({ error: e.message }, { status: 500 });
+        return NextResponse.json({ error: e.message, details: e.toString() }, { status: 500 });
     }
 }
