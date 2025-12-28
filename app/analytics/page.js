@@ -13,22 +13,44 @@ export default function AnalyticsPage() {
         habitStreak: 0
     });
 
-    // Mock fetching stats - in a real app, this would hit an API
+    // Fetch real stats from API
     useEffect(() => {
         const fetchStats = async () => {
-            // Simulating API latency / data aggregation
-            // In a real implementation, you'd fetch from /api/analytics
-            // For now, let's grab from what we can or mock reasonable numbers for the demo
-            // Real implementation would require a dedicated endpoint.
+            try {
+                // Fetch tasks
+                const tasksRes = await fetch('/api/tasks');
+                const tasks = await tasksRes.json();
+                const completed = Array.isArray(tasks) ? tasks.filter(t => t.completed).length : 0;
+                const pending = Array.isArray(tasks) ? tasks.filter(t => !t.completed).length : 0;
 
-            // Let's rely on basic mocked data that "looks" real for the UI structure first as per user request
-            setStats({
-                completedTasks: 12,
-                pendingTasks: 5,
-                totalIncome: 45000,
-                totalExpense: 12000,
-                habitStreak: 7
-            });
+                // Fetch finance data
+                const financeRes = await fetch('/api/finance');
+                const transactions = await financeRes.json();
+                const income = Array.isArray(transactions)
+                    ? transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)
+                    : 0;
+                const expense = Array.isArray(transactions)
+                    ? transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)
+                    : 0;
+
+                // Fetch habits for streak calculation
+                const habitsRes = await fetch('/api/habits');
+                const habits = await habitsRes.json();
+                const streak = Array.isArray(habits) && habits.length > 0
+                    ? habits[0].completedDays.split(',').filter(d => d).length
+                    : 0;
+
+                setStats({
+                    completedTasks: completed,
+                    pendingTasks: pending,
+                    totalIncome: income,
+                    totalExpense: expense,
+                    habitStreak: streak
+                });
+            } catch (error) {
+                console.error('Error fetching analytics:', error);
+                // Keep default zeros if API fails
+            }
         };
         fetchStats();
     }, []);
