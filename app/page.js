@@ -1,6 +1,5 @@
-// Force rebuild 2
+// Force rebuild 3
 import Sidebar from '@/components/Sidebar';
-import ClockWidget from '@/components/widgets/ClockWidget';
 import TaskWidget from '@/components/widgets/TaskWidget';
 import HabitWidget from '@/components/widgets/HabitWidget';
 import FinanceWidget from '@/components/widgets/FinanceWidget';
@@ -29,7 +28,6 @@ export default async function Home() {
                         <h1 className="greeting">Welcome back, <span>{session.username}</span></h1>
                         <h2 className="sub-greeting">Ready to conquer the day?</h2>
                     </div>
-                    <ClockWidget />
                 </header>
 
                 <div className="bento-grid">
