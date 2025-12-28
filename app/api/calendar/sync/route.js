@@ -1,7 +1,12 @@
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import db from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+
+export async function GET() {
+    return NextResponse.json({ message: 'Calendar sync endpoint active' });
+}
 
 export async function POST(request) {
     const { userId } = await auth();

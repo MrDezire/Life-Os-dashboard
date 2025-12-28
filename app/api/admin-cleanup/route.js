@@ -1,6 +1,11 @@
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import db from '@/lib/db';
 import { NextResponse } from 'next/server';
+
+export async function GET() {
+    return NextResponse.json({ message: 'Cleanup endpoint active' });
+}
 
 export async function POST() {
     try {
