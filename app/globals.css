@@ -736,7 +736,10 @@ button {
   .profile-section {
     margin: 0;
     gap: 12px;
-    width: 100%;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: flex-start;
   }
 
