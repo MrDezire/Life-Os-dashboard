@@ -1,38 +1,26 @@
 'use client';
 import { useSettings } from '@/components/Providers';
 import Link from 'next/link';
-import { UserButton, useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
 
 export default function Sidebar() {
     const { name, saveName, toggleTheme, theme } = useSettings();
-    const { user, isLoaded } = useUser();
 
-    // Sync Clerk name with settings if it hasn't been set yet
-    useEffect(() => {
-        if (isLoaded && user && name === 'User') {
-            const clerkName = user.firstName || user.username || 'User';
-            if (clerkName !== 'User') {
-                saveName(clerkName);
-            }
-        }
-    }, [isLoaded, user, name, saveName]);
+
 
     return (
         <aside className="sidebar glass-panel">
             <div className="profile-section">
                 <div className="avatar-container">
-                    <UserButton afterSignOutUrl="/" />
+                    <img src="/logo.png" alt="Logo" className="simple-avatar" />
                 </div>
-                {isLoaded && user && (
-                    <input
-                        type="text"
-                        className="editable-name"
-                        value={name}
-                        onChange={(e) => saveName(e.target.value)}
-                        placeholder="Your Name"
-                    />
-                )}
+                <input
+                    type="text"
+                    className="editable-name"
+                    value={name}
+                    onChange={(e) => saveName(e.target.value)}
+                    placeholder="Your Name"
+                />
             </div>
 
             <div className="actions-group">

@@ -45,3 +45,6 @@ next-env.d.ts
 # local database
 life-os.db
 life-os.db-journal
+
+# clerk configuration (can include secrets)
+/.clerk/

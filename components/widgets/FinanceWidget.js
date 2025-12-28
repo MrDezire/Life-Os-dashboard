@@ -5,17 +5,30 @@ export default function FinanceWidget() {
     const [transactions, setTransactions] = useState([]);
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    const fetchData = async () => {
-        try {
-            const res = await fetch('/api/finance');
-            const data = await res.json();
-            if (Array.isArray(data)) {
-                setTransactions(data);
-                calcTotals(data);
+    useEffect(() => {
+        const saved = localStorage.getItem('lifeOS_finance');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                if (Array.isArray(data)) {
+                    setTransactions(data);
+                    calcTotals(data);
+                }
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) { console.error(e); }
-    };
+        }
+        setIsLoaded(true);
+    }, []);
+
+    useEffect(() => {
+        if (isLoaded) {
+            localStorage.setItem('lifeOS_finance', JSON.stringify(transactions));
+            calcTotals(transactions);
+        }
+    }, [transactions, isLoaded]);
 
     const calcTotals = (data) => {
         let inc = 0, exp = 0;
@@ -27,43 +40,34 @@ export default function FinanceWidget() {
         setExpense(exp);
     };
 
-    useEffect(() => { fetchData(); }, []);
-
-    const addTx = async (type) => {
+    const addTx = (type) => {
         const amountStr = prompt(`Enter ${type} amount in ₹:`);
         if (!amountStr) return;
         const amount = parseFloat(amountStr);
         if (isNaN(amount)) return;
 
-        try {
-            const res = await fetch('/api/finance', {
-                method: 'POST',
-                body: JSON.stringify({ type, amount, description: 'Manual Entry' })
-            });
-            const newTx = await res.json();
-            if (newTx.id) {
-                const newList = [newTx, ...transactions];
-                setTransactions(newList);
-                calcTotals(newList);
-            }
-        } catch (e) { console.error(e); }
+        const newTx = {
+            id: Date.now(),
+            type,
+            amount,
+            description: 'Manual Entry',
+            date: new Date().toISOString()
+        };
+
+        const newList = [newTx, ...transactions];
+        setTransactions(newList);
     };
 
-    const resetFinances = async () => {
+    const resetFinances = () => {
         const confirmed = confirm('Are you sure you want to reset all finance data? This cannot be undone.');
         if (!confirmed) return;
 
-        try {
-            const res = await fetch('/api/finance', {
-                method: 'DELETE'
-            });
-            if (res.ok) {
-                setTransactions([]);
-                setIncome(0);
-                setExpense(0);
-            }
-        } catch (e) { console.error(e); }
+        setTransactions([]);
+        setIncome(0);
+        setExpense(0);
     };
+
+    if (!isLoaded) return null;
 
     return (
         <article className="bento-card finance-widget glass-panel">

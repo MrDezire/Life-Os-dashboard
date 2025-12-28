@@ -2,41 +2,37 @@
 import { useState, useEffect } from 'react';
 
 export default function GoalWidget() {
-    // Default fallback
-    const [goal, setGoal] = useState({ id: 1, title: 'Learn React', progress: 0 });
+    const [goal, setGoal] = useState({ id: 1, title: 'My Monthly Goal', progress: 0 });
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    const fetchGoal = async () => {
-        try {
-            const res = await fetch('/api/goals');
-            const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-                setGoal(data[0]);
+    useEffect(() => {
+        const saved = localStorage.getItem('lifeOS_goal');
+        if (saved) {
+            try {
+                setGoal(JSON.parse(saved));
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) { console.error(e); }
-    };
+        }
+        setIsLoaded(true);
+    }, []);
 
-    useEffect(() => { fetchGoal(); }, []);
+    useEffect(() => {
+        if (isLoaded) {
+            localStorage.setItem('lifeOS_goal', JSON.stringify(goal));
+        }
+    }, [goal, isLoaded]);
 
-    const updateProgress = async (delta) => {
+    const updateProgress = (delta) => {
         const newProg = Math.min(100, Math.max(0, goal.progress + delta));
-        // Optimistic
         setGoal({ ...goal, progress: newProg });
-        await fetch('/api/goals', {
-            method: 'PATCH',
-            body: JSON.stringify({ id: goal.id, progress: newProg })
-        });
     };
 
     const updateTitle = (newTitle) => {
         setGoal({ ...goal, title: newTitle });
     };
 
-    const persistTitle = async () => {
-        await fetch('/api/goals', {
-            method: 'PATCH',
-            body: JSON.stringify({ id: goal.id, title: goal.title })
-        });
-    };
+    if (!isLoaded) return null;
 
     return (
         <article className="bento-card goals-widget glass-panel">
@@ -49,7 +45,7 @@ export default function GoalWidget() {
                     className="goal-title-input"
                     value={goal.title}
                     onChange={(e) => updateTitle(e.target.value)}
-                    onBlur={persistTitle} // Save on blur
+                    placeholder="Enter goal..."
                 />
                 <div className="progress-container">
                     <div className="progress-bar" style={{ width: `${goal.progress}%` }}></div>

@@ -3,26 +3,23 @@ import { useState, useEffect } from 'react';
 
 export default function NotesWidget() {
     const [content, setContent] = useState('');
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        fetch('/api/notes')
-            .then(r => r.json())
-            .then(d => {
-                if (d && d.content !== undefined) setContent(d.content);
-            })
-            .catch(console.error);
+        const saved = localStorage.getItem('lifeOS_notes');
+        if (saved) {
+            setContent(saved);
+        }
+        setIsLoaded(true);
     }, []);
 
     const handleChange = (e) => {
-        setContent(e.target.value);
+        const newValue = e.target.value;
+        setContent(newValue);
+        localStorage.setItem('lifeOS_notes', newValue);
     };
 
-    const save = async () => {
-        await fetch('/api/notes', {
-            method: 'POST',
-            body: JSON.stringify({ content })
-        });
-    };
+    if (!isLoaded) return null;
 
     return (
         <article className="bento-card notes-widget glass-panel">
@@ -34,7 +31,6 @@ export default function NotesWidget() {
                 placeholder="Write your thoughts here..."
                 value={content}
                 onChange={handleChange}
-                onBlur={save}
                 style={{ width: '100%', height: '100%', background: 'transparent', border: 'none', resize: 'none', color: 'inherit', outline: 'none' }}
             ></textarea>
         </article>
