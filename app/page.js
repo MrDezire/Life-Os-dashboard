@@ -1,3 +1,4 @@
+// Force rebuild
 import Sidebar from '@/components/Sidebar';
 import TimeWidget from '@/components/widgets/TimeWidget';
 import TaskWidget from '@/components/widgets/TaskWidget';
