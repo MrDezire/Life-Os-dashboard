@@ -1,14 +1,18 @@
 'use client';
 import { useSettings } from '@/components/Providers';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function Sidebar() {
-    const { name, saveName, toggleTheme, theme } = useSettings();
-
-
-
+export default function Sidebar({ user }) {
+    const { toggleTheme, theme } = useSettings();
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        await fetch('/api/auth/me', { method: 'POST' }); // Logout
+        window.location.href = '/login';
+    };
 
     return (
         <>
@@ -25,13 +29,9 @@ export default function Sidebar() {
                     <div className="avatar-container">
                         <img src="/logo.png" alt="Logo" className="simple-avatar" />
                     </div>
-                    <input
-                        type="text"
-                        className="editable-name"
-                        value={name}
-                        onChange={(e) => saveName(e.target.value)}
-                        placeholder="Your Name"
-                    />
+                    <div className="user-info">
+                        <span className="user-name">{user?.username || 'User'}</span>
+                    </div>
                 </div>
 
                 <div className="actions-group">
@@ -56,13 +56,48 @@ export default function Sidebar() {
                         </Link>
                     </nav>
 
-                    <div className="theme-toggle-container">
-                        <button onClick={toggleTheme} className="theme-btn" title="Toggle Theme">
-                            <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                    <div className="bottom-actions">
+                        <div className="theme-toggle-container">
+                            <button onClick={toggleTheme} className="theme-btn" title="Toggle Theme">
+                                <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                            </button>
+                        </div>
+                        <button onClick={handleLogout} className="logout-btn" title="Logout">
+                            <i className="fa-solid fa-right-from-bracket"></i>
                         </button>
                     </div>
                 </div>
             </aside>
+            <style jsx>{`
+                .user-name {
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    color: var(--text-main);
+                }
+                .bottom-actions {
+                    display: flex;
+                    gap: 12px;
+                    justify-content: center;
+                }
+                .logout-btn {
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 12px;
+                    background: rgba(255, 71, 87, 0.1);
+                    border: 1px solid rgba(255, 71, 87, 0.3);
+                    color: #ff4757;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.1rem;
+                    transition: all 0.2s;
+                }
+                .logout-btn:hover {
+                    background: rgba(255, 71, 87, 0.2);
+                    transform: translateY(-2px);
+                }
+            `}</style>
         </>
     );
 }

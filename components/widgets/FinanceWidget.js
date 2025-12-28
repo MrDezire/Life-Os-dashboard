@@ -5,30 +5,26 @@ export default function FinanceWidget() {
     const [transactions, setTransactions] = useState([]);
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const saved = localStorage.getItem('lifeOS_finance');
-        if (saved) {
-            try {
-                const data = JSON.parse(saved);
-                if (Array.isArray(data)) {
-                    setTransactions(data);
-                    calcTotals(data);
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        setIsLoaded(true);
+        fetchTransactions();
     }, []);
 
-    useEffect(() => {
-        if (isLoaded) {
-            localStorage.setItem('lifeOS_finance', JSON.stringify(transactions));
-            calcTotals(transactions);
+    const fetchTransactions = async () => {
+        try {
+            const res = await fetch('/api/finance');
+            if (res.ok) {
+                const data = await res.json();
+                setTransactions(data);
+                calcTotals(data);
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
         }
-    }, [transactions, isLoaded]);
+    };
 
     const calcTotals = (data) => {
         let inc = 0, exp = 0;
@@ -40,34 +36,54 @@ export default function FinanceWidget() {
         setExpense(exp);
     };
 
-    const addTx = (type) => {
+    const addTx = async (type) => {
         const amountStr = prompt(`Enter ${type} amount in ₹:`);
         if (!amountStr) return;
         const amount = parseFloat(amountStr);
         if (isNaN(amount)) return;
 
-        const newTx = {
+        // Optimistic
+        const tempTx = {
             id: Date.now(),
             type,
             amount,
             description: 'Manual Entry',
             date: new Date().toISOString()
         };
-
-        const newList = [newTx, ...transactions];
+        const newList = [tempTx, ...transactions];
         setTransactions(newList);
+        calcTotals(newList);
+
+        try {
+            const res = await fetch('/api/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type, amount, category: 'General', description: 'Manual Entry' })
+            });
+            const data = await res.json();
+            if (data.success) {
+                // Update ID
+                setTransactions(prev => prev.map(t => t.id === tempTx.id ? { ...t, id: data.id } : t));
+            }
+        } catch (e) {
+            console.error(e);
+        }
     };
 
-    const resetFinances = () => {
+    const resetFinances = async () => {
         const confirmed = confirm('Are you sure you want to reset all finance data? This cannot be undone.');
         if (!confirmed) return;
 
         setTransactions([]);
         setIncome(0);
         setExpense(0);
+
+        try {
+            await fetch('/api/finance', { method: 'DELETE' });
+        } catch (e) { console.error(e); }
     };
 
-    if (!isLoaded) return null;
+    if (loading) return <div className="bento-card finance-widget glass-panel">Loading Finance...</div>;
 
     return (
         <article className="bento-card finance-widget glass-panel">
