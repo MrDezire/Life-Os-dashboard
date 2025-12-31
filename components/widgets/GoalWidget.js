@@ -119,7 +119,7 @@ export default function GoalWidget() {
                     border-radius: 6px;
                     border: 1px solid var(--glass-border);
                     background: rgba(255,255,255,0.05);
-                    color: var(--text-main);
+                    color: white;
                 }
                 .goal-edit-form button {
                     padding: 8px;
@@ -165,7 +165,7 @@ export default function GoalWidget() {
                     border-radius: 50%;
                     border: 1px solid var(--glass-border);
                     background: rgba(255,255,255,0.05);
-                    color: var(--text-main);
+                    color: white;
                     cursor: pointer;
                 }
                 .edit-goal-btn {
