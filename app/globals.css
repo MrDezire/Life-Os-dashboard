@@ -1073,18 +1073,24 @@ button {
     min-height: 200px;
   }
 
+  /* Reset all span containers to single column */
+  .span-large,
+  .span-medium {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+
   .task-widget,
   .habit-widget,
   .weather-widget,
   .music-widget,
-  .notes-widget {
-    grid-column: span 1 !important;
-  }
-
+  .notes-widget,
   .finance-widget,
   .goals-widget,
-  .pomodoro-widget {
+  .pomodoro-widget,
+  .quote-widget {
     grid-column: span 1 !important;
+    grid-row: span 1 !important;
   }
 
   /* Adjust header for mobile */
@@ -1094,6 +1100,16 @@ button {
 
   .sub-greeting {
     font-size: 0.9rem;
+  }
+
+  /* Ensure proper padding for mobile */
+  .app-container {
+    padding: 12px;
+    padding-top: 80px;
+  }
+
+  .bento-grid {
+    gap: 16px;
   }
 }
 
