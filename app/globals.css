@@ -729,11 +729,17 @@ button {
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
-    padding: 16px;
+    padding: 12px;
     padding-top: 110px;
+    width: 100%;
+    max-width: 100vw;
     /* Space for Toggle Button */
     height: auto;
     overflow-x: hidden;
+  }
+
+  .bento-card {
+    width: 100% !important;
   }
 
   /* Hamburger Toggle Button */
