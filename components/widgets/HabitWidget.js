@@ -165,6 +165,59 @@ export default function HabitWidget() {
                     cursor: pointer;
                     font-weight: bold;
                 }
+                .habit-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+                .habit-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                .habit-info {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .habit-name {
+                    font-weight: 500;
+                    color: var(--text-main);
+                }
+                .habit-days {
+                    display: flex;
+                    gap: 6px;
+                    justify-content: space-between;
+                }
+                .day-circle {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.75rem;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid var(--glass-border);
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    color: var(--text-muted);
+                }
+                .day-circle.active {
+                    background: var(--neon-cyan);
+                    color: black;
+                    border-color: var(--neon-cyan);
+                    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+                }
+                .day-circle.today {
+                    border-color: var(--neon-purple);
+                    color: var(--neon-purple);
+                }
+                .day-circle.active.today {
+                    background: var(--neon-cyan);
+                    color: black;
+                    border-color: var(--neon-cyan);
+                }
                 .delete-habit-btn {
                     background: none;
                     border: none;
@@ -176,6 +229,12 @@ export default function HabitWidget() {
                 }
                 .delete-habit-btn:hover {
                     color: #ff4d4d;
+                }
+                .empty-state {
+                    text-align: center;
+                    color: var(--text-muted);
+                    font-style: italic;
+                    margin-top: 20px;
                 }
             `}</style>
         </article>

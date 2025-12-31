@@ -597,16 +597,231 @@ i {
   align-items: center;
 }
 
-.goal-controls button {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.1);
+/* Goal Widget */
+.goal-widget .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.goal-display h4 {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
   color: var(--text-main);
+  font-weight: 600;
+}
+
+.progress-container {
+  margin-bottom: 24px;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+  transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-text {
+  font-size: 1rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.percent-text {
+  font-size: 0.9rem;
+  color: var(--neon-cyan);
+  font-weight: bold;
+}
+
+.progress-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.progress-controls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
+}
+
+.progress-controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--neon-cyan);
+  transform: translateY(-2px);
+}
+
+.progress-controls button:active {
+  transform: scale(0.9);
+}
+
+.edit-goal-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.edit-goal-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.goal-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.goal-edit-form input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  font-size: 1rem;
+}
+
+.goal-edit-form button {
+  padding: 12px;
+  background: var(--neon-cyan);
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+/* Habit Widget Styles */
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.habit-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.habit-item:last-child {
+  border-bottom: none;
+}
+
+.habit-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.habit-name {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.habit-days {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.day-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: var(--text-muted);
+}
+
+.day-circle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.day-circle.active {
+  background: var(--neon-cyan);
+  color: black;
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+  font-weight: bold;
+}
+
+.day-circle.today {
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+  border-width: 2px;
+}
+
+.day-circle.active.today {
+  background: var(--neon-cyan);
+  color: black;
+  border-color: var(--neon-cyan);
+}
+
+.delete-habit-btn {
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.2);
+  color: #ff4757;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-habit-btn:hover {
+  background: rgba(255, 71, 87, 0.2);
+  transform: scale(1.1);
 }
 
 /* Animations */

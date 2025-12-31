@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
                 const habitsRes = await fetch('/api/habits');
                 const habits = await habitsRes.json();
                 const streak = Array.isArray(habits) && habits.length > 0
-                    ? habits[0].completedDays.split(',').filter(d => d).length
+                    ? (habits[0].completed_days || "").split(',').filter(d => d).length
                     : 0;
 
                 setStats({
