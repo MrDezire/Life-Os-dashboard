@@ -853,18 +853,23 @@ button {
     gap: 16px;
   }
 
+  .span-large,
+  .span-medium {
+    grid-column: span 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+  }
+
   .task-widget,
   .habit-widget,
   .weather-widget,
   .music-widget,
-  .notes-widget {
-    grid-column: span 1 !important;
-  }
-
+  .notes-widget,
   .finance-widget,
   .goals-widget,
   .pomodoro-widget {
     grid-column: span 1 !important;
+    width: 100% !important;
   }
 }
 
