@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 import { useSettings } from '@/components/Providers';
 import Sidebar from '@/components/Sidebar';
 import { useState, useEffect } from 'react';
