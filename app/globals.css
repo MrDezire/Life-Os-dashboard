@@ -849,7 +849,8 @@ button {
   }
 
   .bento-grid {
-    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 16px;
   }
 
