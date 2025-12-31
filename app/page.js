@@ -1,4 +1,4 @@
-// Force rebuild 3
+export const dynamic = 'force-dynamic';
 import Sidebar from '@/components/Sidebar';
 import TaskWidget from '@/components/widgets/TaskWidget';
 import HabitWidget from '@/components/widgets/HabitWidget';
@@ -9,23 +9,23 @@ import NotesWidget from '@/components/widgets/NotesWidget';
 import WeatherWidget from '@/components/widgets/WeatherWidget';
 import MusicWidget from '@/components/widgets/MusicWidget';
 import QuoteWidget from '@/components/widgets/QuoteWidget';
-import { getSession } from '@/lib/auth';
-import { redirect } from 'next/navigation';
+import { currentUser } from '@clerk/nextjs/server';
 
 export default async function Home() {
-    const session = await getSession();
+    const user = await currentUser();
 
-    if (!session) {
-        redirect('/login');
+    if (!user) {
+        // middleware handles this usually, but safe fallback
+        return null;
     }
 
     return (
         <div className="app-container">
-            <Sidebar user={session} />
+            <Sidebar />
             <main className="main-content">
                 <header className="header-section">
                     <div className="greeting-container">
-                        <h1 className="greeting">Welcome back, <span>{session.username}</span></h1>
+                        <h1 className="greeting">Welcome back, <span>{user.firstName || user.username}</span></h1>
                         <h2 className="sub-greeting">Ready to conquer the day?</h2>
                     </div>
                 </header>

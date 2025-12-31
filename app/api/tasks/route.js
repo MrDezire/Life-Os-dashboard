@@ -1,16 +1,16 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { getSession } from '@/lib/auth';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET() {
-    const session = await getSession();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const result = await db.execute({
             sql: 'SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC',
-            args: [session.userId]
+            args: [userId]
         });
 
         // Convert integer 1/0 to boolean
@@ -26,15 +26,15 @@ export async function GET() {
 }
 
 export async function POST(request) {
-    const session = await getSession();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const { text, completed } = await request.json();
 
         const result = await db.execute({
             sql: 'INSERT INTO tasks (user_id, text, completed) VALUES (?, ?, ?)',
-            args: [session.userId, text, completed ? 1 : 0]
+            args: [userId, text, completed ? 1 : 0]
         });
 
         return NextResponse.json({
@@ -49,15 +49,15 @@ export async function POST(request) {
 }
 
 export async function PATCH(request) {
-    const session = await getSession();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const { id, completed } = await request.json();
 
         await db.execute({
             sql: 'UPDATE tasks SET completed = ? WHERE id = ? AND user_id = ?',
-            args: [completed ? 1 : 0, id, session.userId]
+            args: [completed ? 1 : 0, id, userId]
         });
 
         return NextResponse.json({ success: true });
@@ -67,8 +67,8 @@ export async function PATCH(request) {
 }
 
 export async function DELETE(request) {
-    const session = await getSession();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { userId } = await auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
         const { searchParams } = new URL(request.url);
@@ -76,7 +76,7 @@ export async function DELETE(request) {
 
         await db.execute({
             sql: 'DELETE FROM tasks WHERE id = ? AND user_id = ?',
-            args: [id, session.userId]
+            args: [id, userId]
         });
 
         return NextResponse.json({ success: true });

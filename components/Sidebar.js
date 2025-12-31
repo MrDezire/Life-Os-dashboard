@@ -2,16 +2,18 @@
 import { useSettings } from '@/components/Providers';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useUser, useClerk } from '@clerk/nextjs';
 
-export default function Sidebar({ user }) {
+export default function Sidebar() {
     const { toggleTheme, theme } = useSettings();
     const [isOpen, setIsOpen] = useState(false);
+    const { user } = useUser();
+    const { signOut } = useClerk();
     const router = useRouter();
 
     const handleLogout = async () => {
-        await fetch('/api/auth/me', { method: 'POST' }); // Logout
-        window.location.href = '/login';
+        await signOut(() => router.push('/sign-in'));
     };
 
     return (
@@ -27,10 +29,10 @@ export default function Sidebar({ user }) {
             <aside className={`sidebar glass-panel ${isOpen ? 'open' : ''}`}>
                 <div className="profile-section">
                     <div className="avatar-container">
-                        <img src="/logo.png" alt="Logo" className="simple-avatar" />
+                        <img src={user?.imageUrl || "/logo.png"} alt="User" className="simple-avatar" />
                     </div>
                     <div className="user-info">
-                        <span className="user-name">{user?.username || 'User'}</span>
+                        <span className="user-name">{user?.firstName || user?.username || 'User'}</span>
                     </div>
                 </div>
 

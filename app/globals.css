@@ -284,6 +284,7 @@ i {
   font-weight: 700;
   background: linear-gradient(90deg, var(--text-main), var(--text-muted));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -729,7 +730,7 @@ button {
   .app-container {
     flex-direction: column;
     padding: 16px;
-    padding-top: 80px;
+    padding-top: 110px;
     /* Space for Toggle Button */
     height: auto;
     overflow-x: hidden;
@@ -848,7 +849,8 @@ button {
   }
 
   .bento-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 16px;
   }
 
   .task-widget,
